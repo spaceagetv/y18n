@@ -56,8 +56,7 @@
   },
   "files": [
     "build",
-    "index.mjs",
-    "!*.d.ts"
+    "index.mjs"
   ],
   "engines": {
     "node": ">=10"
