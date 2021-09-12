@@ -9,7 +9,7 @@ interface Locale {
 }
 declare const y18n$0: (opts: Y18NOpts) => {
     __: (...args: (string | Function)[]) => string;
-    __n: () => any;
+    __n: (singular: string, plural: string, quantity: number, ...args: (string | Function)[]) => any;
     setLocale: (locale: string) => void;
     getLocale: () => string;
     updateLocale: (obj: Locale) => void;

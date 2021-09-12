@@ -45,14 +45,13 @@ class Y18N {
         }
         return shim.format.apply(shim.format, [this.cache[this.locale][str] || str].concat(args));
     }
-    __n() {
-        const args = Array.prototype.slice.call(arguments);
-        const singular = args.shift();
-        const plural = args.shift();
-        const quantity = args.shift();
+    __n(singular, plural, quantity, ...args) {
         let cb = function () { }; // start with noop.
-        if (typeof args[args.length - 1] === 'function')
-            cb = args.pop();
+        const lastArg = args[args.length - 1];
+        if (typeof lastArg === 'function') {
+            cb = lastArg;
+            args.pop();
+        }
         if (!this.cache[this.locale])
             this._readLocaleFile();
         let str = quantity === 1 ? singular : plural;
@@ -145,7 +144,7 @@ class Y18N {
             if (err instanceof SyntaxError) {
                 err.message = 'syntax error in ' + languageFile;
             }
-            if (err.code === 'ENOENT')
+            if (isError(err) && err.code === 'ENOENT')
                 localeLookup = {};
             else
                 throw err;
@@ -177,6 +176,9 @@ function y18n$1(opts, _shim) {
         updateLocale: y18n.updateLocale.bind(y18n),
         locale: y18n.locale
     };
+}
+function isError(error) {
+    return error instanceof Error;
 }
 
 var nodePlatformShim = {

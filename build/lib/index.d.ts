@@ -18,7 +18,7 @@ export interface PlatformShim {
 }
 export declare function y18n(opts: Y18NOpts, _shim: PlatformShim): {
     __: (...args: (string | Function)[]) => string;
-    __n: () => any;
+    __n: (singular: string, plural: string, quantity: number, ...args: (string | Function)[]) => any;
     setLocale: (locale: string) => void;
     getLocale: () => string;
     updateLocale: (obj: Locale) => void;

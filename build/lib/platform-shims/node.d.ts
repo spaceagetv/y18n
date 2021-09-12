@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import { readFileSync, writeFile } from 'fs';
 import { format } from 'util';
 declare const _default: {

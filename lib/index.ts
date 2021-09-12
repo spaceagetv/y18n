@@ -82,14 +82,13 @@ class Y18N {
     return shim.format.apply(shim.format, [this.cache[this.locale][str] || str].concat(args as string[]))
   }
 
-  __n () {
-    const args = Array.prototype.slice.call(arguments)
-    const singular: string = args.shift()
-    const plural: string = args.shift()
-    const quantity: number = args.shift()
-
-    let cb = function () {} // start with noop.
-    if (typeof args[args.length - 1] === 'function') cb = args.pop()
+  __n (singular: string, plural: string, quantity: number, ...args: (string|Function)[]) {
+    let cb: Function = function () {} // start with noop.
+    const lastArg = args[args.length - 1]
+    if (typeof lastArg === 'function') {
+      cb = lastArg
+      args.pop()
+    }
 
     if (!this.cache[this.locale]) this._readLocaleFile()
 
@@ -123,7 +122,7 @@ class Y18N {
     const values: (string|number)[] = [str]
     if (~str.indexOf('%d')) values.push(quantity)
 
-    return shim.format.apply(shim.format, values.concat(args))
+    return shim.format.apply(shim.format, values.concat(args as string[]))
   }
 
   setLocale (locale: string) {
@@ -194,7 +193,7 @@ class Y18N {
         err.message = 'syntax error in ' + languageFile
       }
 
-      if (err.code === 'ENOENT') localeLookup = {}
+      if (isError(err) && err.code === 'ENOENT') localeLookup = {}
       else throw err
     }
 
@@ -227,4 +226,8 @@ export function y18n (opts: Y18NOpts, _shim: PlatformShim) {
     updateLocale: y18n.updateLocale.bind(y18n),
     locale: y18n.locale
   }
+}
+
+function isError (error: any): error is NodeJS.ErrnoException {
+  return error instanceof Error
 }
