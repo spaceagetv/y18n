@@ -23,7 +23,7 @@
     "pretest": "rimraf build && tsc -p tsconfig.test.json && cross-env NODE_ENV=test npm run build:cjs",
     "test": "c8 --reporter=text --reporter=html mocha test/*.cjs",
     "test:esm": "c8 --reporter=text --reporter=html mocha test/esm/*.mjs",
-    "posttest": "npm run check",
+    "posttest": "npm run check ",
     "coverage": "c8 report --check-coverage",
     "precompile": "rimraf build",
     "compile": "tsc",
